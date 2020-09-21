@@ -5,7 +5,6 @@
 # run with "python3 main.py"
 # **************************
 
-# hello
 # import seat class and set max theatre size
 import seats
 MAX_ROWS = 25       # must be 99 or less
