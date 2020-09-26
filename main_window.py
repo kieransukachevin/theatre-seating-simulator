@@ -1,85 +1,88 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from theatre_view import MainView, SeatsView
+from PyQt5.QtWidgets import QApplication
 import sys
+
 MAX_ROWS = 25
 MAX_COLUMNS = 30
 
-class MyWindow(QMainWindow):
+class TheatreModel:
     def __init__(self):
-        super(MyWindow, self).__init__()
-        self.setGeometry(200, 100, 800, 600)
-        self.setWindowTitle("Theatre Generator")
-        self.initUI()
+        self.numSeats = 0
+        self.windows = []
+        self.topButtons = []
+        self.sideButtons = []
+        self.seats = []
 
-    def initUI(self):
-        self.gridLayout = QtWidgets.QGridLayout()   # create layout for central widget
-        self.menuLayout = QtWidgets.QHBoxLayout()   # create layout for menubar
+class Seat:
+    def __init__(self, button, state, row_price):
+        self.is_taken = state
+        self.price = row_price
+        self.button = button
 
-        self.lineRow = QtWidgets.QLineEdit(self)
-        self.lineRow.setObjectName("Rows")
-        self.lineRow.setPlaceholderText("Rows")
-        self.menuLayout.addWidget(self.lineRow, 100)
-        self.numRows = 5
+    def get_push_button(self):
+        return self.button
 
-        self.lineCol = QtWidgets.QLineEdit(self)
-        self.lineCol.setObjectName("Columns")
-        self.lineCol.setPlaceholderText("Columns")
-        self.menuLayout.addWidget(self.lineCol, 200)
-        self.numCols = 5
+class TheatreController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+        self.init_controller()
 
-        self.generateButton = QtWidgets.QPushButton("generateButton", self)
-        self.generateButton.clicked.connect(self.generate_button_clicked)
-        self.menuLayout.addWidget(self.generateButton, 300)
-
-        wid = QtWidgets.QWidget(self)
-        self.setMenuWidget(wid)
-        wid.setLayout(self.menuLayout)
+    def init_controller(self):
+        view.generateButton.clicked.connect(self.generate_button_clicked)
 
     def generate_button_clicked(self):
         try:
-            numRows = self.lineRow.text()
-            numCols = self.lineCol.text()
-            int(numRows)
-            int(numCols)
-            self.generate_seats(numRows, numCols)
+            rows = view.lineRow.text()
+            cols = view.lineCol.text()
+            rows = int(rows)
+            cols = int(cols)
+            if (rows > MAX_ROWS) or (cols > MAX_COLUMNS):
+                view.popup_msg("The max number of rows is " + str(MAX_ROWS) + " and columns is " + str(MAX_COLUMNS))
+            else:
+                newWindow = SeatsView()                
+                newModel = TheatreModel()
+                self.generate_top_buttons(newWindow, newModel, cols)
+                self.generate_side_buttons(newWindow, newModel, rows)
+                self.generate_seats(newWindow, newModel, rows, cols)
         except ValueError:
-            self.popup_msg("Enter numbers for rows and columns")
+            view.popup_msg("Enter numbers for rows and columns")
 
-    def generate_seats(self, numRows, numCols):
-        for i in range(int(numRows)):
-            for j in range(int(numCols)):
-                button = QtWidgets.QPushButton(self)
-                button.setText("seat")
-                button.setMaximumSize(80, 40)
-                button.clicked.connect(self.seat_button_clicked)
-                self.gridLayout.addWidget(button, i, j)
-        wid = QtWidgets.QWidget(self)
-        self.setCentralWidget(wid)
-        wid.setLayout(self.gridLayout)
+    def generate_top_buttons(self, newWindow, newModel, cols):
+        for i in range(cols):
+            button = newWindow.create_seat_button(str(i + 1), "red")
+            newWindow.gridLayout.addWidget(button, 1, i + 2)
+            newModel.topButtons.append(button)
 
-    def update(self):
-        self.label.adjustSize()
+    def generate_side_buttons(self, newWindow, newModel, rows):
+        row_name = 'A'
+        for i in range(rows):
+            button = newWindow.create_seat_button(row_name, "red")
+            newWindow.gridLayout.addWidget(button, i + 2, 0)
+            newModel.sideButtons.append(button)
+            row_name = chr(ord(row_name) + 1)
 
-    def seat_button_clicked(self):
-        pass
-
-    def popup_msg(self, message):
-        msg = QMessageBox()
-        msg.setGeometry(500, 300, 500, 100)
-        msg.setWindowTitle("Error")
-        msg.setText("Error")
-        msg.setIcon(QMessageBox.Information)
-        msg.setDefaultButton(QMessageBox.Ignore)
-        msg.setInformativeText(message)
-
-        x = msg.exec_() # executes message box
+    def generate_seats(self, newWindow, newModel, rows, cols):
+        row_name = 'A'
+        newWindow.gridLayout.addWidget(newWindow.create_label(), 0, 0)
+        newWindow.gridLayout.setRowStretch(0, 1)
+        newWindow.gridLayout.setColumnStretch(0, 1)
+        for i in range(rows):
+            row = []
+            for j in range(cols):
+                button = Seat(newWindow.create_seat_button(row_name + str(j + 1), "yellow"), False, 0)
+                row.append(button)
+                newWindow.gridLayout.addWidget(button.get_push_button(), i + 2, j + 1)
+            newModel.seats.append(row)
+            row_name = chr(ord(row_name) + 1)
+        model.windows.append(newWindow)
+        newWindow.centralWidget().setLayout(newWindow.gridLayout)
+        newWindow.show()
     
 
-def window():
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    win = MyWindow()
-    win.show()
+    model = TheatreModel()
+    view = MainView()
+    controller = TheatreController(model, view)
     sys.exit(app.exec_())
-
-
-window()
