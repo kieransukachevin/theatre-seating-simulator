@@ -12,7 +12,7 @@ class TheatreController:
         self.init_controller()
 
     def init_controller(self):
-        view.generate_button.clicked.connect(self.try_generate_button)
+        self.view.generate_button.clicked.connect(self.try_generate_button)
 
     def try_generate_button(self):
         try:
@@ -26,14 +26,29 @@ class TheatreController:
             price = int(price)
 
             if (num_rows < MAX_ROWS) and (num_cols < MAX_COLUMNS):
-                print("right before SeatsView object is made")
-                newWindow = SeatsView(num_rows, num_cols)
-                newModel = TheatreModel(num_rows, num_cols)
+                self.window = SeatsView(num_rows, num_cols)
+                self.model = TheatreModel(num_rows, num_cols, price)
+                self.connect_seat_buttons()
             else:
                 view.popup_msg("The max number of rows is " + str(MAX_ROWS) + " and columns is " + str(MAX_COLUMNS))
         except ValueError:
             view.popup_msg("Enter numbers for rows and columns")
     
+    def connect_seat_buttons(self):
+        for i in range(self.model.num_rows):
+            row = []
+            for j in range(self.model.num_cols):
+                self.window.seat_buttons[i][j].clicked.connect(self.sell_ticket)
+                new_seat = Seat(False, self.model.price)
+                row.append(new_seat)
+            self.model.seats.append(row)
+
+    def sell_ticket(self):
+        button_name = 
+        self.model.total_revenue += self.model.price
+        self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
+        self.window.update_label.repaint()
+        print("ticket sold")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

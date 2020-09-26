@@ -76,7 +76,6 @@ class SeatsView(MainView):
     def __init__(self, num_rows, num_cols):
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
-        self.setWindowIcon(QtGui.QIcon("kieran's logo.jpg"))
         self.seat_buttons = []
         self.row_buttons = []
         self.col_buttons = []
@@ -113,17 +112,16 @@ class SeatsView(MainView):
         return label
 
     def generate_update_box(self, num_rows):
-        self.grid_layout.addWidget(self.create_label(), 0, 0, num_rows, 0)
+        self.update_label = self.create_label()
+        self.grid_layout.addWidget(self.update_label, 0, 0, num_rows, 0)
         self.grid_layout.setRowStretch(0, 1)
         self.grid_layout.setColumnStretch(0, 1)
-        print("update box created")
 
     def generate_top_buttons(self, num_cols):
         for i in range(num_cols):
             button = self.create_seat_button(str(i + 1), "red")
             self.grid_layout.addWidget(button, 2, i + 1)
             self.col_buttons.append(button)
-        print("top buttons created")
 
     def generate_side_buttons(self, num_rows):
         row_letter = 'A'
@@ -132,10 +130,8 @@ class SeatsView(MainView):
             self.grid_layout.addWidget(button, i + 3, 0)
             self.row_buttons.append(button)
             row_letter = chr(ord(row_letter) + 1)
-        print("side buttons created")
 
     def generate_seats(self, num_rows, num_cols):
-        # Create a grid of seat buttons num_cols tall and num_rows wide
         row_letter = 'A'
         for i in range(num_rows):
             new_row = []
@@ -145,11 +141,3 @@ class SeatsView(MainView):
                 self.grid_layout.addWidget(new_row[j], i + 3, j + 1)
             self.seat_buttons.append(new_row)
             row_letter = chr(ord(row_letter) + 1)
-        print("seates created")
-
-    def seat_button_clicked(self, button):
-        if button.styleSheet() == "yellow":
-            button.setStyleSheet("background-color : red")
-        else:
-            button.setStyleSheet("background-color : yellow")
-        pass
