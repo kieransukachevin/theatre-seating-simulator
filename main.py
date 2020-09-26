@@ -14,7 +14,7 @@ while True:
     # welcome message 
     print("\n****** Welcome to Theatre Simulator ******")
 
-    # ask user for number of rows
+    # ask user for number of rows 
     while True:    
         try:
             num_rows = input("\nHow many rows are in the theatre?\nRows:")
