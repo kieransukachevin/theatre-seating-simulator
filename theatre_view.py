@@ -79,8 +79,9 @@ class SeatsView(MainView):
 
     def init_UI(self, num_rows, num_cols):
         self.grid_layout = QtWidgets.QGridLayout()
+        self.grid_layout.addWidget(self.create_label_image(), 0, 0, 1, num_cols)
 
-        self.generate_update_box(num_rows)
+        self.generate_update_box(num_cols)
         self.generate_top_buttons(num_cols)
         self.generate_side_buttons(num_rows)
         self.generate_seats(num_rows, num_cols)
@@ -89,12 +90,29 @@ class SeatsView(MainView):
         central_widget.setLayout(self.grid_layout)
         self.setCentralWidget(central_widget)
 
+    def create_label_image(self):
+        label = QtWidgets.QLabel(self)
+        label.setPixmap(QtGui.QPixmap("theatre simulator image2.jpg"))
+        label.setScaledContents(True)
+        label.setMinimumWidth(500)
+        label.setMaximumWidth(500)
+        label.setMinimumHeight(50)
+        label.setMaximumHeight(50)
+        return label
+
     def create_seat_button(self, name, color):
         button = QtWidgets.QPushButton(self)
         button.setText(name)
         button.setMaximumSize(80, 40)
         button.setMinimumSize(30, 20)
-        button.setStyleSheet("background-color : " + color)
+        button.setStyleSheet("QPushButton {\
+                            background-color: white;\
+                            border-style: outset;\
+                            border-width: 4px;\
+                            border-color: black;}\
+                            QPushButton::pressed {\
+                            background-color: rgb(207, 209, 208);\
+                            border-style: inset;}")
         return button
 
     def create_label(self):
@@ -105,9 +123,9 @@ class SeatsView(MainView):
         label.setFrameStyle(50)
         return label
 
-    def generate_update_box(self, num_rows):
+    def generate_update_box(self, num_cols):
         self.update_label = self.create_label()
-        self.grid_layout.addWidget(self.update_label, 0, 0, num_rows, 0)
+        self.grid_layout.addWidget(self.update_label, 1, 0, 1, num_cols)
         self.grid_layout.setRowStretch(0, 1)
         self.grid_layout.setColumnStretch(0, 1)
 
@@ -130,7 +148,7 @@ class SeatsView(MainView):
         for i in range(num_rows):
             new_row = []
             for j in range(num_cols):
-                button = self.create_seat_button(row_letter + str(j + 1), "yellow")
+                button = self.create_seat_button(row_letter + str(j + 1), "black")
                 new_row.append(button)
                 self.grid_layout.addWidget(new_row[j], i + 3, j + 1)
             self.seat_buttons.append(new_row)
