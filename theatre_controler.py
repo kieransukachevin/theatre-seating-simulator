@@ -38,17 +38,24 @@ class TheatreController:
         for i in range(self.model.num_rows):
             row = []
             for j in range(self.model.num_cols):
-                self.window.seat_buttons[i][j].clicked.connect(self.sell_ticket)
                 new_seat = Seat(False, self.model.price)
                 row.append(new_seat)
+                print("i is " + str(i) + " and j is " + str(j))
+                self.window.seat_buttons[i][j].clicked.connect(lambda: self.sell_ticket(i, j))
             self.model.seats.append(row)
 
-    def sell_ticket(self):
-        button_name = 
-        self.model.total_revenue += self.model.price
-        self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
-        self.window.update_label.repaint()
-        print("ticket sold")
+    def sell_ticket(self, row, col):
+        if self.model.seats[row][col].state == False:
+            self.model.total_revenue += self.model.price
+            self.model.seats[row][col].state = True
+            self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
+            self.window.update_label.repaint()
+        else:
+            self.model.total_revenue -= self.model.price
+            self.model.seats[row][col].state = False
+            self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
+            self.window.update_label.repaint()    
+        print("row " + str(row) + " column " + str(col))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

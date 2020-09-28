@@ -5,11 +5,10 @@ import sys
 
 class MainView(QMainWindow):
     def __init__(self):
-        # Initialize the window
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
         self.init_UI()
-        self.init_menubar()
+        self.init_menu_bar()
         self.show()
 
     def init_UI(self):
@@ -17,19 +16,15 @@ class MainView(QMainWindow):
         self.setGeometry(200, 200, 1000, 100)
         self.menu_layout = QtWidgets.QHBoxLayout()
 
-        # Create line edit widget for parsing number of rows
+        # Create line edit widgets for parsing input
         self.line_row = QtWidgets.QLineEdit(self)
         self.line_row.setObjectName("Rows")
         self.line_row.setPlaceholderText("Number of Rows")
         self.menu_layout.addWidget(self.line_row, 600)
-
-        # Create line edit widget for parsing number of columns
         self.line_col = QtWidgets.QLineEdit(self)
         self.line_col.setObjectName("Columns")
         self.line_col.setPlaceholderText("Number of Columns")
         self.menu_layout.addWidget(self.line_col, 600)
-
-        # Create line edit widget for parsing price of a seat
         self.seat_price = QtWidgets.QLineEdit(self)
         self.seat_price.setObjectName("Price")
         self.seat_price.setPlaceholderText("Price of a seat")
@@ -39,28 +34,27 @@ class MainView(QMainWindow):
         self.generate_button = QtWidgets.QPushButton("generate", self)
         self.menu_layout.addWidget(self.generate_button, 300)
 
-        # Set window layout to the horizontal layout with widgets added
         wid = QtWidgets.QWidget(self)
         self.setMenuWidget(wid)
         wid.setLayout(self.menu_layout)
 
-    def init_menubar(self):
-        # Initialize menubar of window
-        self.menubar = QtWidgets.QMenuBar(self)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 686, 22))
-        self.menubar.setObjectName("menubar")
-        self.menuFile = QtWidgets.QMenu(self.menubar)
-        self.menuFile.setObjectName("menuFile")
+    def init_menu_bar(self):
+        # Initialize menu_bar of window
+        self.menu_bar = QtWidgets.QMenuBar(self)
+        self.menu_bar.setGeometry(QtCore.QRect(0, 0, 686, 22))
+        self.menu_bar.setObjectName("menu_bar")
+        self.menu_file = QtWidgets.QMenu(self.menu_bar)
+        self.menu_file.setObjectName("menu_file")
 
-        self.actionSave = QtWidgets.QAction(self)
-        self.actionSave.setObjectName("actionSave")
+        self.action_save = QtWidgets.QAction(self)
+        self.action_save.setObjectName("action_save")
 
-        self.menuFile.addAction(self.actionSave)
+        self.menu_file.addAction(self.action_save)
 
         translate = QtCore.QCoreApplication.translate
-        self.actionSave.setText(translate("MainWindow", "Save"))
-        self.actionSave.setStatusTip(translate("MainWindow", "Save a file"))
-        self.actionSave.setShortcut(translate("MainWindow", "Ctrl+S"))
+        self.action_save.setText(translate("MainWindow", "Save"))
+        self.action_save.setStatusTip(translate("MainWindow", "Save a file"))
+        self.action_save.setShortcut(translate("MainWindow", "Ctrl+S"))
 
     def popup_msg(self, message):
         msg = QMessageBox()
@@ -80,7 +74,7 @@ class SeatsView(MainView):
         self.row_buttons = []
         self.col_buttons = []
         self.init_UI(num_rows, num_cols)
-        self.init_menubar()
+        self.init_menu_bar()
         self.show()
 
     def init_UI(self, num_rows, num_cols):
