@@ -29,33 +29,34 @@ class TheatreController:
                 self.window = SeatsView(num_rows, num_cols)
                 self.model = TheatreModel(num_rows, num_cols, price)
                 self.connect_seat_buttons()
+                # self.test_connect_seats()
             else:
                 view.popup_msg("The max number of rows is " + str(MAX_ROWS) + " and columns is " + str(MAX_COLUMNS))
         except ValueError:
             view.popup_msg("Enter numbers for rows and columns")
     
     def connect_seat_buttons(self):
-        for i in range(self.model.num_rows):
-            row = []
-            for j in range(self.model.num_cols):
-                new_seat = Seat(False, self.model.price)
-                row.append(new_seat)
-                print("i is " + str(i) + " and j is " + str(j))
-                self.window.seat_buttons[i][j].clicked.connect(lambda: self.sell_ticket(i, j))
-            self.model.seats.append(row)
+        for key in self.window.seat_buttons:
+            new_seat = Seat(False, self.model.price)
+            self.model.seats[self.window.seat_buttons[key].text()] = new_seat
+            self.window.seat_buttons[key].pressed.connect(
+                lambda key=self.window.seat_buttons[key].text(): self.sell_ticket(key)
+            )
 
-    def sell_ticket(self, row, col):
-        if self.model.seats[row][col].state == False:
+    def sell_ticket(self, key):
+        if self.model.seats[key].state == False:
             self.model.total_revenue += self.model.price
-            self.model.seats[row][col].state = True
-            self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
-            self.window.update_label.repaint()
+            self.model.seats[key].state = True
+            self.window.update_display_box("Seat " + key + " sold", self.model.total_revenue)
+            self.window.display_box.repaint()
+            self.window.button_pressed_style(self.window.seat_buttons[key])
         else:
             self.model.total_revenue -= self.model.price
-            self.model.seats[row][col].state = False
-            self.window.update_label.setText("Total revenue is: " + str(self.model.total_revenue))
-            self.window.update_label.repaint()    
-        print("row " + str(row) + " column " + str(col))
+            self.model.seats[key].state = False
+            self.window.update_display_box("Seat " + key + " refunded", self.model.total_revenue)
+            self.window.display_box.repaint()
+            self.window.button_default_style(self.window.seat_buttons[key])
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -6,7 +6,7 @@ class TheatreModel:
 
         self.top_buttons = []
         self.side_buttons = []
-        self.seats = []
+        self.seats = {}
 
         self.total_revenue = 0
 

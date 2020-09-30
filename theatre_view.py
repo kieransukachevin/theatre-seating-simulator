@@ -70,7 +70,7 @@ class SeatsView(MainView):
     def __init__(self, num_rows, num_cols):
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
-        self.seat_buttons = []
+        self.seat_buttons = {}
         self.row_buttons = []
         self.col_buttons = []
         self.init_UI(num_rows, num_cols)
@@ -81,7 +81,7 @@ class SeatsView(MainView):
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.addWidget(self.create_label_image(), 0, 0, 1, num_cols)
 
-        self.generate_update_box(num_cols)
+        self.generate_display_box(num_cols)
         self.generate_top_buttons(num_cols)
         self.generate_side_buttons(num_rows)
         self.generate_seats(num_rows, num_cols)
@@ -105,27 +105,43 @@ class SeatsView(MainView):
         button.setText(name)
         button.setMaximumSize(80, 40)
         button.setMinimumSize(30, 20)
+        self.button_default_style(button)
+        return button
+
+    def button_default_style(self, button):
         button.setStyleSheet("QPushButton {\
                             background-color: white;\
                             border-style: outset;\
                             border-width: 4px;\
                             border-color: black;}\
                             QPushButton::pressed {\
+                            background-color: rgb(141, 143, 142)\
+                            border-style: inset;\
+                            border-width: 4px;\
+                            border-color: black;}")
+
+    def button_pressed_style(self, button):
+        button.setStyleSheet("QPushButton {\
                             background-color: rgb(207, 209, 208);\
-                            border-style: inset;}")
-        return button
+                            border-style: outset;\
+                            border-width: 4px;\
+                            border-color: black;}\
+                            QPushButton::pressed {\
+                            background-color: rgb(141, 143, 142)\
+                            border-style: inset;\
+                            border-width: 4px;\
+                            border-color: black;}")
 
-    def create_label(self):
-        label = QtWidgets.QLabel(self)
-        label.setObjectName("Update Label")
-        label.setMinimumWidth(500)
-        label.setMaximumHeight(100)
-        label.setFrameStyle(50)
-        return label
+    def update_display_box(self, text, revenue):
+        self.display_box.setText(text + "\nTotal revenue: $" + str(revenue))
 
-    def generate_update_box(self, num_cols):
-        self.update_label = self.create_label()
-        self.grid_layout.addWidget(self.update_label, 1, 0, 1, num_cols)
+    def generate_display_box(self, num_cols):
+        self.display_box = QtWidgets.QLabel(self)
+        self.display_box.setObjectName("Update Label")
+        self.display_box.setMinimumWidth(500)
+        self.display_box.setMaximumHeight(100)
+        self.display_box.setStyleSheet("border-style: outset; border-width: 4px; border-color: black; background-color: white;")
+        self.grid_layout.addWidget(self.display_box, 1, 0, 1, num_cols)
         self.grid_layout.setRowStretch(0, 1)
         self.grid_layout.setColumnStretch(0, 1)
 
@@ -146,10 +162,8 @@ class SeatsView(MainView):
     def generate_seats(self, num_rows, num_cols):
         row_letter = 'A'
         for i in range(num_rows):
-            new_row = []
             for j in range(num_cols):
                 button = self.create_seat_button(row_letter + str(j + 1), "black")
-                new_row.append(button)
-                self.grid_layout.addWidget(new_row[j], i + 3, j + 1)
-            self.seat_buttons.append(new_row)
+                self.grid_layout.addWidget(button, i + 3, j + 1)
+                self.seat_buttons[button.text()] = button
             row_letter = chr(ord(row_letter) + 1)
