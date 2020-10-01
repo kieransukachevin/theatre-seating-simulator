@@ -2,6 +2,8 @@
 
 Simple GUI theatre simulator that allows the user to sell seats, rows, or columns, written in python. 
 Uses PyQt5 python bindings.
+![Screenshot of Project]
+(https://github.com/kieransukachevin/theatre-seating-simulator/blob/master/images/prjct-screenshot.jpg)
 
 ## Install PyQt5:
 Create a virtual environment to hold libraries:
