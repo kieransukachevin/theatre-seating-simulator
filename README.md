@@ -8,7 +8,8 @@ Uses PyQt5 python bindings.
 In the screenshot, multiple seats have been sold (in grey) with L8 being the last seat sold.
 
 ## Install PyQt5:
-Create a virtual environment to hold libraries:
+PyQt5 packages must be installed to compile code.
+First, create a virtual environment to hold libraries:
 ```bash
 python3 -m venv venv
 ```
