@@ -92,7 +92,7 @@ class SeatsView(MainView):
 
     def create_label_image(self):
         label = QtWidgets.QLabel(self)
-        label.setPixmap(QtGui.QPixmap("theatre simulator image2.jpg"))
+        label.setPixmap(QtGui.QPixmap("images/theatre simulator image.jpg"))
         label.setScaledContents(True)
         label.setMinimumWidth(500)
         label.setMaximumWidth(500)
