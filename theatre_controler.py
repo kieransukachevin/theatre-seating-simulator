@@ -47,7 +47,7 @@ class TheatreController:
         if self.model.seats[key].state == False:
             self.model.total_revenue += self.model.price
             self.model.seats[key].state = True
-            self.window.update_display_box("Seat " + key + " sold", self.model.total_revenue)
+            self.window.update_display_box("Seat " + key + " sold for $" + str(self.model.price), self.model.total_revenue)
             self.window.display_box.repaint()
             self.window.button_pressed_style(self.window.seat_buttons[key])
         else:
