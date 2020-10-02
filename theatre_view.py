@@ -71,8 +71,8 @@ class SeatsView(MainView):
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
         self.seat_buttons = {}
-        self.row_buttons = []
-        self.col_buttons = []
+        self.row_buttons = {}
+        self.col_buttons = {}
         self.init_UI(num_rows, num_cols)
         self.init_menu_bar()
         self.show()
@@ -149,14 +149,14 @@ class SeatsView(MainView):
         for i in range(num_cols):
             button = self.create_seat_button(str(i + 1), "red")
             self.grid_layout.addWidget(button, 2, i + 1)
-            self.col_buttons.append(button)
+            self.col_buttons[button.text()] = button
 
     def generate_side_buttons(self, num_rows):
         row_letter = 'A'
         for i in range(num_rows):
             button = self.create_seat_button(row_letter, "red")
             self.grid_layout.addWidget(button, i + 3, 0)
-            self.row_buttons.append(button)
+            self.row_buttons[button.text()] = button
             row_letter = chr(ord(row_letter) + 1)
 
     def generate_seats(self, num_rows, num_cols):

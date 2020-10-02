@@ -3,12 +3,10 @@ class TheatreModel:
         self.num_rows = num_rows
         self.num_cols = num_cols
         self.price = price
-
-        self.top_buttons = []
-        self.side_buttons = []
-        self.seats = {}
-
         self.total_revenue = 0
+        self.seats = {}
+        self.rows = {}
+        self.cols = {}
 
 class Seat:
     def __init__(self, state, price):
