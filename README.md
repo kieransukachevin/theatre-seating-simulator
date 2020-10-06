@@ -27,7 +27,7 @@ pip install PyQt5
 ```
 Visit [PyQt5](https://pypi.org/project/PyQt5/) for more.
 
-Once PyQt5 packages are installed, interpret theatre_controler.py file to run.
+Once PyQt5 packages are installed, interpret theatre_controler.py file inside the virtual environmnet to run.
 ```bash
 python3 theatre_controler.py
 ```

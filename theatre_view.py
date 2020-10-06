@@ -5,6 +5,8 @@ import sys
 
 class MainView(QMainWindow):
     def __init__(self):
+        '''Initialize main window.'''
+
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
         self.init_UI()
@@ -12,11 +14,11 @@ class MainView(QMainWindow):
         self.show()
 
     def init_UI(self):
-        # Do basic setups
+        '''Setup window dimensions, widgets, and layouts.'''
+
         self.setGeometry(200, 200, 1000, 100)
         self.menu_layout = QtWidgets.QHBoxLayout()
 
-        # Create line edit widgets for parsing input
         self.line_row = QtWidgets.QLineEdit(self)
         self.line_row.setObjectName("Rows")
         self.line_row.setPlaceholderText("Number of Rows")
@@ -30,7 +32,6 @@ class MainView(QMainWindow):
         self.seat_price.setPlaceholderText("Price of a seat")
         self.menu_layout.addWidget(self.seat_price, 700)
 
-        # Create push button for generating a new window
         self.generate_button = QtWidgets.QPushButton("generate", self)
         self.menu_layout.addWidget(self.generate_button, 300)
 
@@ -39,7 +40,8 @@ class MainView(QMainWindow):
         wid.setLayout(self.menu_layout)
 
     def init_menu_bar(self):
-        # Initialize menu_bar of window
+        '''Initialize menu bar.'''
+
         self.menu_bar = QtWidgets.QMenuBar(self)
         self.menu_bar.setGeometry(QtCore.QRect(0, 0, 686, 22))
         self.menu_bar.setObjectName("menu_bar")
@@ -57,6 +59,8 @@ class MainView(QMainWindow):
         self.action_save.setShortcut(translate("MainWindow", "Ctrl+S"))
 
     def popup_msg(self, message):
+        '''Creates and displays a pop-up message.'''
+
         msg = QMessageBox()
         msg.setGeometry(500, 300, 500, 100)
         msg.setWindowTitle("Error")
@@ -68,6 +72,8 @@ class MainView(QMainWindow):
 
 class SeatsView(MainView):
     def __init__(self, num_rows, num_cols):
+        '''Initialize seat window.'''
+
         super(MainView, self).__init__()
         self.setWindowTitle("Theatre Generator")
         self.seat_buttons = {}
@@ -78,6 +84,8 @@ class SeatsView(MainView):
         self.show()
 
     def init_UI(self, num_rows, num_cols):
+        '''Setup widgets and layouts.'''
+
         self.grid_layout = QtWidgets.QGridLayout()
         self.grid_layout.addWidget(self.create_label_image(), 0, 0, 1, num_cols)
 
@@ -91,6 +99,8 @@ class SeatsView(MainView):
         self.setCentralWidget(central_widget)
 
     def create_label_image(self):
+        '''Creates a label to be used to display an image.'''
+
         label = QtWidgets.QLabel(self)
         label.setPixmap(QtGui.QPixmap("images/theatre simulator image.jpg"))
         label.setScaledContents(True)
@@ -101,6 +111,8 @@ class SeatsView(MainView):
         return label
 
     def create_seat_button(self, name, color):
+        '''Creates a seat button.'''
+
         button = QtWidgets.QPushButton(self)
         button.setText(name)
         button.setMaximumSize(80, 40)
@@ -109,6 +121,8 @@ class SeatsView(MainView):
         return button
 
     def button_default_style(self, button):
+        '''Sets a button to the default, unpressed style.'''
+
         button.setStyleSheet("QPushButton {\
                             background-color: white;\
                             border-style: outset;\
@@ -121,6 +135,8 @@ class SeatsView(MainView):
                             border-color: black;}")
 
     def button_pressed_style(self, button):
+        '''Sets a button to the pressed style.'''
+
         button.setStyleSheet("QPushButton {\
                             background-color: rgb(207, 209, 208);\
                             border-style: outset;\
@@ -133,9 +149,13 @@ class SeatsView(MainView):
                             border-color: black;}")
 
     def update_display_box(self, text, revenue):
+        '''Updates the display box indicating the most recent action and the total revenue.'''
+
         self.display_box.setText(text + "\nTotal revenue: $" + str(revenue))
 
     def generate_display_box(self, num_cols):
+        '''Creates a display box to be used to indicate the most recent action adn the total revenue.'''
+
         self.display_box = QtWidgets.QLabel(self)
         self.display_box.setObjectName("Update Label")
         self.display_box.setMinimumWidth(500)
@@ -146,12 +166,16 @@ class SeatsView(MainView):
         self.grid_layout.setColumnStretch(0, 1)
 
     def generate_top_buttons(self, num_cols):
+        '''Creates the column buttons of the window.'''
+
         for i in range(num_cols):
             button = self.create_seat_button(str(i + 1), "red")
             self.grid_layout.addWidget(button, 2, i + 1)
             self.col_buttons[button.text()] = button
 
     def generate_side_buttons(self, num_rows):
+        '''Creates the row buttons of the window.'''
+
         row_letter = 'A'
         for i in range(num_rows):
             button = self.create_seat_button(row_letter, "red")
@@ -160,6 +184,8 @@ class SeatsView(MainView):
             row_letter = chr(ord(row_letter) + 1)
 
     def generate_seats(self, num_rows, num_cols):
+        '''Creates the seat buttons of the window.'''
+
         row_letter = 'A'
         for i in range(num_rows):
             for j in range(num_cols):

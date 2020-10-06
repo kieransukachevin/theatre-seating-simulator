@@ -8,13 +8,19 @@ MAX_COLUMNS = 30
 
 class TheatreController:
     def __init__(self, view):
+        '''Initialize controller.'''
+
         self.view = view
         self.init_controller()
 
     def init_controller(self):
+        '''Connects generate button with try_generate_button method.'''
+
         self.view.generate_button.clicked.connect(self.try_generate_button)
 
     def try_generate_button(self):
+        '''Parses user input from text edit boxes.'''
+
         try:
             num_rows = view.line_row.text()
             num_rows = int(num_rows)
@@ -37,6 +43,8 @@ class TheatreController:
             view.popup_msg("Enter numbers for rows and columns")
     
     def connect_seat_buttons(self):
+        '''Connects the seat buttons to the check_state method.'''
+
         for key in self.window.seat_buttons:
             new_seat = Seat(False, self.model.price)
             self.model.seats[self.window.seat_buttons[key].text()] = new_seat
@@ -45,6 +53,8 @@ class TheatreController:
             )
 
     def connect_row_buttons(self):
+        '''Connects the row buttons to the sell_row method.'''
+
         for key in self.window.row_buttons:
             new_row = Seat(False, self.model.price * self.model.num_cols)
             self.model.rows[self.window.row_buttons[key].text()] = new_row
@@ -53,6 +63,8 @@ class TheatreController:
             )
 
     def connect_column_buttons(self):
+        '''Connects the column buttons to the sell_column method.'''
+
         for key in self.window.col_buttons:
             new_col = Seat(False, self.model.price * self.model.num_rows)
             self.model.cols[self.window.col_buttons[key].text()] = new_col
@@ -61,6 +73,8 @@ class TheatreController:
             )
 
     def check_state(self, key):
+        '''Checks if a seat is sold or not by checking the seat's state.'''
+
         if self.model.seats[key].state == False:
             self.sell_seat(key)
             self.window.update_display_box("Seat " + key + " sold for $" + str(self.model.price), self.model.total_revenue)
@@ -69,6 +83,8 @@ class TheatreController:
             self.window.update_display_box("Seat " + key + " refunded", self.model.total_revenue)
 
     def sell_seat(self, key):
+        '''Sells a seat changing the seat state to True.'''
+
         if self.model.seats[key].state == False:
             self.model.total_revenue += self.model.seats[key].price
             self.model.seats[key].state = True
@@ -76,6 +92,8 @@ class TheatreController:
             self.window.button_pressed_style(self.window.seat_buttons[key])
 
     def refund_seat(self, key):
+        '''Refunds a seat changing the seat state to False.'''
+
         if self.model.seats[key].state == True:
             self.model.total_revenue -= self.model.price
             self.model.seats[key].state = False
@@ -83,6 +101,8 @@ class TheatreController:
             self.window.button_default_style(self.window.seat_buttons[key])
 
     def sell_row(self, key):
+        '''Sells a row of seats by calling sell_seat on each seat in the row.'''
+
         if self.model.rows[key].state == False:
             for i in range(self.model.num_cols):
                 seat_name = key + str(i + 1)
@@ -101,6 +121,8 @@ class TheatreController:
             self.window.button_default_style(self.window.row_buttons[key])
 
     def sell_column(self, key):
+        '''Sells a column of seats by calling sell_seat on each seat in the column.'''
+
         seat_letter = 'A'
         if self.model.cols[key].state == False:
             for i in range(self.model.num_rows):
